@@ -1,0 +1,6 @@
+q = load "Beattie_Subs2";
+
+q = filter q by 'Tenure' >= 0 && 'Tenure' <= 100;
+q_B = filter q by 'Churn' == "Yes";
+result = group q by all full, q_B by all;
+result = foreach result generate (count(q_B) / count(q))*100 as 'churnRate';
