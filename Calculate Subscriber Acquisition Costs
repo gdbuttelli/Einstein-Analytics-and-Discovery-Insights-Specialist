@@ -1,0 +1,16 @@
+Subscriber Revenue
+
+q = load "Beattie_Subs2";
+q = group q by 'Region';
+q = foreach q generate q.'Region' as 'Region', sum(q.'Total_Charges') as 'A';
+q = order q by 'Region' asc;
+q = limit q 2000;
+
+Attrition Cost
+
+q = load "Beattie_Subs2";
+q = filter q by {{row(Tenure_Length_1.selection, [0], ["min","max"]).asRange("Tenure")}};
+result = filter q by 'Churn' == "Yes";
+result = group result by all;
+result = foreach result generate count() as 'count', count()*950 as attrCost;
+result = limit result 2000; 
