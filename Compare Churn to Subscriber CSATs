@@ -1,0 +1,15 @@
+Beattie Survey
+
+ops = load "Beattie_Subs2";
+oemSurveyResponses = load "Beattie_OEM_Survey";
+q = cogroup ops by ('Account_Manager','Region'), oemSurveyResponses by ('Account_Manager','Region');
+q = foreach q generate ops.'Region' as 'Region', round(avg(oemSurveyResponses.'CSAT'),0) as 'avg_CSAT',round(avg(ops.'Tenure'),0) as 'avg_Tenure';
+d = order q by avg_CSAT asc;
+
+OEM
+
+oem = load "Beattie_OEM_Survey";
+q = group oem by ('OEM');
+q = foreach q generate oem.'OEM' as 'OEM', count() as 'rowCount';
+q = order q by 'rowCount' asc;
+q = limit q 2000;
