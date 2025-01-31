@@ -1,5 +1,47 @@
+Churn Tenure
+
 q = load "Beattie_Subs";
 q = filter q by {{row(Tenure_Length_1.selection,[0],["min","max"]).asRange ('Tenure')}};
 q_B = filter q by 'Churn' == "Yes";
 result = group q by all full, q_B by all;
 result = foreach result generate (count(q_B) / count(q))*100 as 'churnRate';
+
+Tenure Length
+
+{
+    "broadcastFacet": true,
+    "columns": {
+        "min": {
+            "type": "number"
+        },
+        "max": {
+            "type": "number"
+        },
+        "Display": {
+            "type": "string"
+        }
+    },
+    "label": "Tenure Length",
+    "selectMode": "single",
+    "type": "staticflex",
+    "values": [
+        {
+            "Display": "Low Risk",
+            "min": 1,
+            "max": 12
+        },
+        {
+            "Display": "Medium Risk",
+            "min": 13,
+            "max": 24
+        },
+        {
+            "Display": "High Risk",
+            "min": 25,
+            "max": 36
+        }
+    ],
+    "numbers": [],
+    "strings": [],
+    "groups": []
+}
